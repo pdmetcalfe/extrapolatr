@@ -4,14 +4,17 @@
 #include <Rcpp.h>
 #include <R_ext/Lapack.h>
 
-Rcpp::NumericMatrix compute_delta(const Rcpp::NumericMatrix& mat) {
-  Rcpp::NumericMatrix res(mat.nrow(), mat.ncol() - 1);
-  for (R_len_t col=0; col!=mat.ncol() - 1; ++col) {
-    for (R_len_t row=0; row!=mat.nrow(); ++row) {
-      res(row, col) = mat(row, col + 1) - mat(row, col);
+namespace {
+
+  Rcpp::NumericMatrix compute_delta(const Rcpp::NumericMatrix& mat) {
+    Rcpp::NumericMatrix res(mat.nrow(), mat.ncol() - 1);
+    for (R_len_t col=0; col!=mat.ncol() - 1; ++col) {
+      for (R_len_t row=0; row!=mat.nrow(); ++row) {
+	res(row, col) = mat(row, col + 1) - mat(row, col);
+      }
     }
+    return res;
   }
-  return res;
 }
 
 //' Perform reduced-row extrapolation
