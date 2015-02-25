@@ -2,12 +2,13 @@
 % Please edit documentation in R/RcppExports.R
 \name{rre}
 \alias{rre}
-\title{Perform reduced-row extrapolation}
+\title{Perform reduced-rank extrapolation}
 \usage{
 rre(sequence)
 }
 \arguments{
-\item{sequence}{a matrix, the columns of which are the sequence to accelerate}
+\item{sequence}{a matrix, the columns of which are the sequence to
+accelerate}
 }
 \value{
 the RRE limit
