@@ -9,9 +9,7 @@ namespace {
   Rcpp::NumericMatrix compute_delta(const Rcpp::NumericMatrix& mat) {
     Rcpp::NumericMatrix res(mat.nrow(), mat.ncol() - 1);
     for (R_len_t col=0; col!=mat.ncol() - 1; ++col) {
-      for (R_len_t row=0; row!=mat.nrow(); ++row) {
-	res(row, col) = mat(row, col + 1) - mat(row, col);
-      }
+      res(Rcpp::_, col) = mat(Rcpp::_, col+1) - mat(Rcpp::_, col);
     }
     return res;
   }
@@ -50,9 +48,7 @@ Rcpp::NumericVector rre(const Rcpp::NumericMatrix& sequence) {
   // copy into rhs
   std::copy(delta.begin(), delta.begin() + m, b.begin());
 
-  Rcpp::IntegerVector jpvt(n);
-  // fill jpvt
-  std::fill(jpvt.begin(), jpvt.end(), 0);
+  Rcpp::IntegerVector jpvt(n, 0);
 
   double dummy_work;
   int lwork = -1;
