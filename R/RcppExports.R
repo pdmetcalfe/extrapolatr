@@ -19,3 +19,21 @@ rre <- function(sequence) {
     .Call('extrapolatr_rre', PACKAGE = 'extrapolatr', sequence)
 }
 
+#' Perform minimal polynomial extrapolation
+#'
+#' This method removes any geometric terms from a sequence, leaving
+#' you with the limit.  Note, as in the examples, that it will happily
+#' remove divergent sequences.  This is a feature rather than a bug.
+#' @param sequence a matrix, the columns of which are the sequence to
+#'        accelerate
+#' @return the MPE limit
+#' @examples
+#' ind <- seq_len(5)
+#' vals <- 0.5^(ind - 1)
+#' mpe(matrix(vals, nrow=1))
+#' mpe(rbind(vals, 2 + vals))
+#' @export
+mpe <- function(sequence) {
+    .Call('extrapolatr_mpe', PACKAGE = 'extrapolatr', sequence)
+}
+

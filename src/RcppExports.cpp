@@ -20,3 +20,18 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// mpe
+Rcpp::NumericVector mpe(const Rcpp::NumericMatrix& sequence);
+RcppExport SEXP extrapolatr_mpe(SEXP sequenceSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type sequence(sequenceSEXP );
+        Rcpp::NumericVector __result = mpe(sequence);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
