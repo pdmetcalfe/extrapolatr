@@ -24,4 +24,9 @@ vals <- 0.5^(ind - 1)
 mpe(matrix(vals, nrow=1))
 mpe(rbind(vals, 2 + vals))
 }
+\references{
+Cabay, S. and Jackson, L.W. (1976), A polynomial extrapolation method
+   for finding limits and antilimits for vector sequences, SIAM J.
+   Numer. Anal. 13, 734--752.
+}
 

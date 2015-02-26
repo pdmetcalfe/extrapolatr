@@ -28,6 +28,17 @@ namespace {
 //' vals <- 0.5^(ind - 1)
 //' rre(matrix(vals, nrow=1))
 //' rre(rbind(vals, 2 + vals))
+//' @references
+//' Eddy, R.P. (1979), Extrapolation to the limit of a vector
+//'  sequence, in Wang, P.C.C., ed, Information Linkage Between
+//'  Applied Mathematics and Industry, pp 387-396.
+//'
+//' Mesina, M. (1977), Convergence acceleration for the iterative solution
+//'   of x=Ax + f, Methods Appl. Mech. Eng. 10, 165--173.
+//'
+//' Jbilou, K., and Sadok, H. (1995), Analysis of some vector extrapolation
+//'   methods for solving systems of linear equations, Numer. Math.
+//'   70, 73--89.
 //' @export
 // [[Rcpp::export]]
 Rcpp::NumericVector rre(const Rcpp::NumericMatrix& sequence) {
@@ -103,6 +114,10 @@ Rcpp::NumericVector rre(const Rcpp::NumericMatrix& sequence) {
 //' vals <- 0.5^(ind - 1)
 //' mpe(matrix(vals, nrow=1))
 //' mpe(rbind(vals, 2 + vals))
+//' @references
+//' Cabay, S. and Jackson, L.W. (1976), A polynomial extrapolation method
+//'    for finding limits and antilimits for vector sequences, SIAM J.
+//'    Numer. Anal. 13, 734--752.
 //' @export
 // [[Rcpp::export]]
 Rcpp::NumericVector mpe(const Rcpp::NumericMatrix& sequence) {
