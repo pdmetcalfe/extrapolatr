@@ -135,9 +135,9 @@ Rcpp::NumericVector mpe(const Rcpp::NumericMatrix& sequence) {
   if (sequence.ncol() <= 2) {
     throw(std::runtime_error("Need at least 3 columns"));
   }
-  
+
   Rcpp::NumericMatrix delta(compute_delta(sequence));
-  
+
   const int m = sequence.nrow();
   const int n = delta.ncol() - 1;
   const int lda = m;
