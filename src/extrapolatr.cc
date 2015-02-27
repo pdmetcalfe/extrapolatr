@@ -149,31 +149,41 @@ Rcpp::NumericVector mpe(const Rcpp::NumericMatrix& sequence) {
   // copy into rhs
   std::copy(delta.end() - m, delta.end(), b.begin());
 
-  Rcpp::IntegerVector jpvt(n, 0);
+  Rcpp::NumericVector s(std::min(m, n));
 
   double dummy_work;
+  int dummy_iwork;
   int lwork = -1;
   int info;
   int rank;
-  const double rcond=1e-14;
+  const double rcond=-1;
   // now do a workspace query
-  F77_CALL(dgelsy)(&m, &n, &nrhs, delta.begin(), &lda,
-		   b.begin(), &ldb,
-		   jpvt.begin(), &rcond, &rank,
-		   &dummy_work, &lwork, &info);
+  F77_CALL(dgelsd)(const_cast<int*>(&m),
+		   const_cast<int*>(&n),
+		   const_cast<int*>(&nrhs),
+		   delta.begin(), const_cast<int*>(&lda),
+		   b.begin(), const_cast<int*>(&ldb),
+		   s.begin(), const_cast<double*>(&rcond), &rank,
+		   &dummy_work, &lwork,
+		   &dummy_iwork, &info);
+
 
   Rcpp::NumericVector work(1 + (int)dummy_work);
+  Rcpp::IntegerVector iwork(dummy_iwork);
   lwork = work.length();
-  
-  F77_CALL(dgelsy)(&m, &n, &nrhs, delta.begin(), &lda,
-		   b.begin(), &ldb,
-		   jpvt.begin(), &rcond, &rank,
-		   work.begin(), &lwork, &info);
+  F77_CALL(dgelsd)(const_cast<int*>(&m),
+		   const_cast<int*>(&n),
+		   const_cast<int*>(&nrhs),
+		   delta.begin(), const_cast<int*>(&lda),
+		   b.begin(), const_cast<int*>(&ldb),
+		   s.begin(), const_cast<double*>(&rcond), &rank,
+		   work.begin(), &lwork,
+		   iwork.begin(), &info);
 
   if (info) {
-    throw(std::runtime_error("dgelsy failed"));
+    throw(std::runtime_error("dgelsd failed"));
   }
-  
+
   // now prepare for output
   Rcpp::NumericVector res(sequence.nrow(), 0.0);
   b[n] = -1;
