@@ -1,0 +1,106 @@
+---
+title: "Introduction to extrapolatr"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to extrapolatr}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+It is common to solve numerical problems using point iteration;
+iterating $x_{n+1} = f(x_n)$ to convergence.  Sometimes this technique
+can be fast --- for instance the Newton iteration --- but sometimes
+this technique can be slow, for instance if the function $f$ is slow
+to calculate.  A set of tricks apparently not known in the data
+science community can sometimes accelerate these iterations.  We
+demonstrate here with some examples; these are chosen for ease of
+exposition and not for realism.
+
+# Simple example
+
+
+We begin with a simple (scalar) point iteration; we want to solve $x =
+100$ using the iteration $x_{n+1} = 1 + 0.99 x_n$.  We'll take $50$
+steps, starting at $x_0 = 0.2$.
+
+```{r}
+iteration <- function(start, f, num) {
+    result <- matrix(0, nrow=length(start), ncol=num)
+    for (ind in seq_len(num)) {
+        result[,ind] <- f(start)
+        start <- result[,ind]
+    }
+    result
+}
+
+func <- function(x) {1 + 0.99 * x}
+
+steps <- iteration(0.2, func, 50)
+```
+
+Let's see how the error decreases with the iterations:
+
+```{r warning=FALSE}
+plot(abs(100 - as.vector(steps)), ylim=c(0, 100),
+     ylab='error', xlab='iteration number')
+```
+
+This is horribly slow (and of course was constructed to be slow).  But
+it does serve to demonstrate how well extrapolation can work.  Let's
+try the RRE method.
+
+
+```{r warning=FALSE}
+library("extrapolatr")
+
+x0 <- 0.2
+rre.results <- c()
+for (ind in seq_len(5)) {
+    results <- iteration(x0, func, 10)
+    rre.results <- c(rre.results, results)
+    x0 <- rre(results[, seq(5, 10), drop=FALSE])
+}
+
+plot(abs(100 - as.vector(steps)), ylim=c(0, 100),
+     ylab='error', xlab='iteration number')
+points(abs(100 - rre.results), ylim=c(0, 100),
+       ylab='error (RRE)', xlab='iteration number', pch=22)
+```
+
+Where previously we had an error of approximately $50$ after $50$
+iterations, here we have an exact answer after the first RRE step.
+This was --- in fact --- predictable.  RRE is exactly designed to take
+out geometric errors; if errors are exactly geometric RRE will be
+perfect.
+
+# Vector example
+
+Let's try a more complex example; solving $x = \log (2 + (I + A) x)$,
+where $A$ is a random matrix.
+
+```{r warning=FALSE}
+set.seed(20150228)
+
+A <- matrix(runif(100, -0.1, 0.1), nrow=10, ncol=10)
+func <- function(x) {
+    log(2 + x + A %*% x)
+}
+
+start <- runif(10)
+rre.results <- matrix(0, nrow=10, ncol=5 * 10)
+for (ind in seq_len(5)) {
+    results <- iteration(start, func, 10)
+    range <- seq((ind-1) * 10 + 1, ind * 10)
+    rre.results[,range] <- results
+    start <- rre(results[, seq(5, 10), drop=FALSE])
+}
+
+plot(apply(apply(rre.results, 1, diff),
+           1, function(x) {sum(abs(x))}),
+     log='y', xlab='iteration count', ylab='delta')
+```
+
+We can see quite clearly how the RRE causes sharp decreases in the
+error.  It's quite a nice technique for getting more out of an
+iteration.
