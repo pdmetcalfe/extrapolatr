@@ -21,3 +21,8 @@
 ##' @importFrom Rcpp sourceCpp
 ##' @name extrapolatr
 NULL
+
+## unload the shared object
+.onUnload <- function (libpath) {
+    library.dynam.unload("extrapolatr", libpath)
+}
