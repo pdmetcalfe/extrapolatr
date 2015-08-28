@@ -9,29 +9,21 @@ using namespace Rcpp;
 Rcpp::NumericVector rre(const Rcpp::NumericMatrix& sequence);
 RcppExport SEXP extrapolatr_rre(SEXP sequenceSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type sequence(sequenceSEXP );
-        Rcpp::NumericVector __result = rre(sequence);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type sequence(sequenceSEXP);
+    __result = Rcpp::wrap(rre(sequence));
+    return __result;
 END_RCPP
 }
 // mpe
 Rcpp::NumericVector mpe(const Rcpp::NumericMatrix& sequence);
 RcppExport SEXP extrapolatr_mpe(SEXP sequenceSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type sequence(sequenceSEXP );
-        Rcpp::NumericVector __result = mpe(sequence);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type sequence(sequenceSEXP);
+    __result = Rcpp::wrap(mpe(sequence));
+    return __result;
 END_RCPP
 }
