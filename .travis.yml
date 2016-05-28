@@ -1,7 +1,7 @@
 language: r
-sudo: required
+sudo: false
+cache: packages
 
-r_binary_packages:
- - testthat
- - knitr
- - Rcpp
+os:
+  - linux
+  - osx
