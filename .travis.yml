@@ -4,3 +4,9 @@ cache: packages
 
 os:
   - linux
+
+r_packages:
+  - covr
+
+after_success:
+  - echo 'covr::coveralls()' | R --vanilla
