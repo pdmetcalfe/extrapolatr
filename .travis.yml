@@ -4,4 +4,3 @@ cache: packages
 
 os:
   - linux
-  - osx
